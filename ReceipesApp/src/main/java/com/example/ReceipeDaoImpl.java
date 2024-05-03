@@ -50,7 +50,7 @@ public class ReceipeDaoImpl implements ReceipeDaoInterface {
 	                q,
 	                (rs, rowNum) -> {
 	                    Map<String, String> receipeDetail = new HashMap<>();
-	                    receipeDetail.put("url", "http://localhost:8083/images/" + rs.getString("imagename"));
+	                    receipeDetail.put("url", "https://receipe-springboot-api.up.railway.app/images/" + rs.getString("imagename"));
 	                    receipeDetail.put("id", String.valueOf(rs.getInt("id")));
 	                    receipeDetail.put("foodname", rs.getString("foodname"));
 	                    receipeDetail.put("description", rs.getString("description"));
