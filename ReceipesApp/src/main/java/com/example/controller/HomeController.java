@@ -1,15 +1,29 @@
 package com.example.controller;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,11 +36,21 @@ import com.example.ReceipeDaoImpl;
 import com.example.bean.CountofReceipes;
 import com.example.bean.Receipe;
 
+
 @RestController
 public class HomeController {
 	
 	@Autowired
 	ReceipeDaoImpl receipedao;
+	
+	@Value("${project.image}")
+	private String path;
+	
+	private final ResourceLoader resourceLoader;
+	
+	public HomeController(ResourceLoader resourceLoader) {
+		this.resourceLoader =resourceLoader;
+	}
 	
 	
 	//add Data to Server
@@ -39,9 +63,17 @@ public class HomeController {
 	            String fileName = image.getOriginalFilename();
 	            String extension = fileName.substring(fileName.lastIndexOf('.'));
 	            String newFilename = "img_" + id + extension; // Or use any other naming convention
-	            String pathofdirectory = new ClassPathResource("static/images/").getFile().getAbsolutePath();
-	            File imageFile = new File(pathofdirectory + newFilename);
-	            image.transferTo(imageFile);
+	            
+	         // Ensure the target directory exists
+	            Resource resource = resourceLoader.getResource("classpath:" + "static/images");
+	            File folder = resource.getFile();
+	            String pathasJar = folder.getAbsolutePath();
+	            
+	            String filePath = pathasJar+ "/" +newFilename;
+	            
+	            
+	            Files.copy(image.getInputStream(), Paths.get(filePath));
+	           
 	            
 	            //First Letter Capital and anothers Letter smallcase
 	            String firstLetter = category.substring(0, 1).toUpperCase();
@@ -52,6 +84,7 @@ public class HomeController {
 	            String typeletter = type.substring(0, 1).toUpperCase();
 	    		String fromssecondtype = type.substring(1).toLowerCase();
 	    		String types = typeletter + fromssecondtype;
+	    		
 
 	            // Save image name and ID to database
 	            String message = receipedao.insertReceipe(id, foodname, description, ingredient, preparation, history, cat, types, newFilename);
@@ -67,8 +100,9 @@ public class HomeController {
 	//getAll data from server with sortBy, by size and page size
 	 @GetMapping("/getAll")
 	    public ResponseEntity<CountofReceipes> getAllReceipes(@RequestParam(defaultValue = "0") int page,
-	    		@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "foodname") String sortBy, @RequestParam(defaultValue = "asc") String orderBy) {
+	    		@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "foodname") String sortBy, @RequestParam(defaultValue = "asc") String orderBy) throws IOException {
 	        try {
+	        
 	          CountofReceipes receipedetailwithCount = receipedao.getAllReceipes(page, size, sortBy, orderBy);
 	          
 	          return ResponseEntity.ok(receipedetailwithCount);
