@@ -102,6 +102,13 @@ public class HomeController {
 	    public ResponseEntity<CountofReceipes> getAllReceipes(@RequestParam(defaultValue = "0") int page,
 	    		@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "foodname") String sortBy, @RequestParam(defaultValue = "asc") String orderBy) throws IOException {
 	        try {
+	        	
+	        	
+	        	 Resource resource = resourceLoader.getResource("classpath:" + "static/images");
+		         File folder = resource.getFile();
+		         String pathasJar = folder.getAbsolutePath();
+		         
+		         System.out.println("Problems: "+ pathasJar);
 	        
 	          CountofReceipes receipedetailwithCount = receipedao.getAllReceipes(page, size, sortBy, orderBy);
 	          
