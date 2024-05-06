@@ -104,7 +104,7 @@ public class HomeController {
 	        try {
 	        	
 	        	
-	        	InputStream inputStream = getClass().getClassLoader().getResourceAsStream("static/images");
+	        	InputStream inputStream = getClass().getClassLoader().getResourceAsStream("static");
 	            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 	            String contents = reader.lines().collect(Collectors.joining(System.lineSeparator()));
 		         
