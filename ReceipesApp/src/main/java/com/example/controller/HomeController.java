@@ -104,11 +104,11 @@ public class HomeController {
 	        try {
 	        	
 	        	
-	        	 Resource resource = resourceLoader.getResource("classpath:" + "static/images");
-		         File folder = resource.getFile();
-		         String pathasJar = folder.getAbsolutePath();
+	        	InputStream inputStream = getClass().getClassLoader().getResourceAsStream("static/images");
+	            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+	            String contents = reader.lines().collect(Collectors.joining(System.lineSeparator()));
 		         
-		         System.out.println("Problems: "+ pathasJar);
+		         System.out.println("Problems: "+ contents);
 	        
 	          CountofReceipes receipedetailwithCount = receipedao.getAllReceipes(page, size, sortBy, orderBy);
 	          
