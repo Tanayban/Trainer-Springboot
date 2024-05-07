@@ -46,6 +46,8 @@ public class HomeController {
 	@Value("${project.image}")
 	private String path;
 	
+	
+	
 	private final ResourceLoader resourceLoader;
 	
 	public HomeController(ResourceLoader resourceLoader) {
@@ -104,11 +106,13 @@ public class HomeController {
 	        try {
 	        	
 	        	
+	        	Resource resource = resourceLoader.getResource("classpath:" + "static/images");
+	            InputStream dbAsStream = resource.getInputStream(); // <-- this is the difference
 	        	InputStream inputStream = getClass().getClassLoader().getResourceAsStream("static");
-	            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+	            BufferedReader reader = new BufferedReader(new InputStreamReader(dbAsStream));
 	            String contents = reader.lines().collect(Collectors.joining(System.lineSeparator()));
 		         
-		         System.out.println("Problems: "+ contents);
+		        System.out.println("Problems: "+ contents);
 	        
 	          CountofReceipes receipedetailwithCount = receipedao.getAllReceipes(page, size, sortBy, orderBy);
 	          
