@@ -109,7 +109,7 @@ public class HomeController {
 	        try {
 	        	
 	        	//1
-	        	Resource resource = resourceLoader.getResource("classpath:" + "static/images");
+	        	Resource resource = resourceLoader.getResource("classpath:/" + "static/images");
 	            InputStream dbAsStream = resource.getInputStream(); // <-- this is the difference
 	            
 	            
@@ -119,6 +119,9 @@ public class HomeController {
 	        	//3
 	        	ClassPathResource resources = new ClassPathResource("static/images");
 	        	InputStream inputStreams = resources.getInputStream();
+	        	
+	        	//4
+	        	
 	        	
 	        	
 //	            BufferedReader reader = new BufferedReader(new InputStreamReader(dbAsStream));
