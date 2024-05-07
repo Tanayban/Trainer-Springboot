@@ -71,7 +71,12 @@ public class HomeController {
 	            File folder = resource.getFile();
 	            String pathasJar = folder.getAbsolutePath();
 	            
-	            String filePath = pathasJar+ "/" +newFilename;
+	            //try
+	            InputStream dbAsStream = resource.getInputStream(); // <-- this is the difference
+	            BufferedReader reader = new BufferedReader(new InputStreamReader(dbAsStream));
+	            String contents = reader.lines().collect(Collectors.joining(System.lineSeparator()));
+	            
+	            String filePath = contents+ "/" +newFilename;
 	            
 	            
 	            Files.copy(image.getInputStream(), Paths.get(filePath));
@@ -112,7 +117,7 @@ public class HomeController {
 	            BufferedReader reader = new BufferedReader(new InputStreamReader(dbAsStream));
 	            String contents = reader.lines().collect(Collectors.joining(System.lineSeparator()));
 		         
-		        System.out.println("Problems: "+ contents);
+		        System.out.println("Problems: "+ dbAsStream);
 	        
 	          CountofReceipes receipedetailwithCount = receipedao.getAllReceipes(page, size, sortBy, orderBy);
 	          
