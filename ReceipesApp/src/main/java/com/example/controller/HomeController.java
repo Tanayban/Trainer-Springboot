@@ -47,12 +47,10 @@ public class HomeController {
 	private String path;
 	
 	
+	@Autowired
+	private ResourceLoader resourceLoader;
 	
-	private final ResourceLoader resourceLoader;
 	
-	public HomeController(ResourceLoader resourceLoader) {
-		this.resourceLoader =resourceLoader;
-	}
 	
 	
 	//add Data to Server
@@ -117,7 +115,7 @@ public class HomeController {
 	            BufferedReader reader = new BufferedReader(new InputStreamReader(dbAsStream));
 	            String contents = reader.lines().collect(Collectors.joining(System.lineSeparator()));
 		         
-		        System.out.println("Problems: "+ dbAsStream);
+		        System.out.println("Problems: "+ contents);
 	        
 	          CountofReceipes receipedetailwithCount = receipedao.getAllReceipes(page, size, sortBy, orderBy);
 	          
