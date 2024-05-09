@@ -1,12 +1,15 @@
 package com.example;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.cloudinary.Cloudinary;
 import com.example.bean.CountofReceipes;
 import com.example.bean.Receipe;
 
@@ -16,6 +19,9 @@ public class ReceipeDaoImpl implements ReceipeDaoInterface {
 	@Autowired
 	JdbcTemplate jt;
 	
+	@Autowired
+	private Cloudinary cloudinary;
+	
 	public void setJt(JdbcTemplate jt) {
 		this.jt = jt;
 	}
@@ -24,13 +30,22 @@ public class ReceipeDaoImpl implements ReceipeDaoInterface {
 	//insert Data
 	@Override
 	public String insertReceipe(int id, String foodname, String description, String ingredient, String preparation,
-			String history, String category, String type, String imagename) {
+			String history, String category, String type, MultipartFile file) {
 		
-		jt.update("INSERT INTO Receipe(id, foodname, description, ingredient, preparation, history, category, type, imagename) VALUES(?,?,?,?,?,?,?,?,?)",
-				id, foodname, description, ingredient, preparation, history, category, type, imagename);
-		
-		return "Successful Added the Record With Id: ";
-		
+		try {
+			
+			Map data = this.cloudinary.uploader().upload(file.getBytes(), Map.of());
+			
+			String imagename = data.get("url").toString();
+			
+			
+			jt.update("INSERT INTO Receipe(id, foodname, description, ingredient, preparation, history, category, type, imagename) VALUES(?,?,?,?,?,?,?,?,?)",
+					id, foodname, description, ingredient, preparation, history, category, type, imagename);
+			
+			return "Saved Successfully Image and Data: ";
+		} catch(IOException e) {
+			throw new RuntimeException(e.getMessage());
+		}
 	}
 
 	
@@ -50,7 +65,7 @@ public class ReceipeDaoImpl implements ReceipeDaoInterface {
 	                q,
 	                (rs, rowNum) -> {
 	                    Map<String, String> receipeDetail = new HashMap<>();
-	                    receipeDetail.put("url", "https://receipe-springboot-api.up.railway.app/images/" + rs.getString("imagename"));
+	                    receipeDetail.put("url", rs.getString("imagename"));
 	                    receipeDetail.put("id", String.valueOf(rs.getInt("id")));
 	                    receipeDetail.put("foodname", rs.getString("foodname"));
 	                    receipeDetail.put("description", rs.getString("description"));

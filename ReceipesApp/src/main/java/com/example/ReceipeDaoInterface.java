@@ -16,7 +16,7 @@ public interface ReceipeDaoInterface {
 	String ingredient,
 	String preparation,
 	String history,
-	String category, String type, String imagename);
+	String category, String type, MultipartFile file);
 	
 	//Get Receipe
 	public CountofReceipes getAllReceipes(int page, int size, String sortBy, String orderBy);

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>API Documentation</title>
+<style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        
+        .first {
+          background-color: red;
+          color: white;
+        }
+        
+        .second {
+          background-color: green;
+          color: white;
+        }
+        
+        .third {
+          background-color: blue;
+          color: white;
+        }
+        
+        .four {
+          background-color: yellow;
+          color: black;
+        }
+        
+        .five {
+          background-color: #fc4b05;
+          color: black;
+        }
+    </style>
+</head>
+<body>
+ <h1>Receipe API Documentation</h1>
+    <table>
+        <tr>
+            <th>Endpoint</th>
+            <th>Description</th>
+            <th>Request Type</th>
+        </tr>
+        <tr class="first">
+            <td>url/getAll</td>
+            <td>Get all Receipes</td>
+            <td>GET</td>
+        </tr>
+        <tr class="second">
+            <td>url/getAll?page=1&sortBy=foodname&orderBy=desc&size=5</td>
+            <td>The Api Request Have several Sorting Methods.<br>
+             Method are as Follows: sortBy, page, size, orderBy. <br>
+             The Methods are Request Parameters</td>
+            <td>GET</td>
+        </tr>
+        <tr class="third">
+            <td>url/getAll/{category}</td>
+            <td>The Api Can Sort the Receipes According to the category:<br>
+            Breakfast, Lunch, Dinner and Dessert.
+            </td>
+            <td>GET</td>
+        </tr>
+        <tr class="four">
+            <td>url/addReceipe</td>
+            <td>The Api Can Add Receipes. As the form data. The data should be added in this format <br>
+            id, foodname, description, ingredient, preparation, history, category( Breakfast, Lunch, Dinner and Dessert.),
+            <br> type(Vegetarian and Non-vegetarian), image(File and Only Upload Images).
+            </td>
+            <td>POST</td>
+        </tr>
+           <tr class="five">
+            <td>url/updatereceipeById/{id}</td>
+            <td>The Receipes of Api Can be Update By Id.
+            </td>
+            <td>PUT</td>
+        </tr>
+    </table>
+
+</body>
+</html>
