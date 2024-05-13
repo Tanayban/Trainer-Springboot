@@ -101,7 +101,7 @@ public class ReceipeDaoImpl implements ReceipeDaoInterface {
 	                "SELECT * FROM (SELECT u.*, @rownum := @rownum + 1 AS row_num FROM (SELECT id, foodname, description, ingredient, preparation, history, category, type, imagename FROM Receipe  WHERE category = ? ORDER BY " + sortBy + " " + orderBy + " " + ") u CROSS JOIN (SELECT @rownum := 0) r) AS d WHERE row_num <= ? AND row_num > ?",
 	                (rs, rowNum) -> {
 	                    Map<String, String> receipeDetail = new HashMap<>();
-	                    receipeDetail.put("url", "http://localhost:8083/images/" + rs.getString("imagename"));
+	                    receipeDetail.put("url", rs.getString("imagename"));
 	                    receipeDetail.put("id", String.valueOf(rs.getInt("id")));
 	                    receipeDetail.put("foodname", rs.getString("foodname"));
 	                    receipeDetail.put("description", rs.getString("description"));
